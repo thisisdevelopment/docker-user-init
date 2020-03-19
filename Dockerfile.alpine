@@ -1,0 +1,11 @@
+FROM alpine:latest AS build
+
+ADD docker-user-init.c /app/
+WORKDIR /app
+
+RUN apk add --no-cache --update build-base
+RUN gcc -o docker-user-init docker-user-init.c
+
+FROM scratch
+
+COPY --from=build /app/docker-user-init /
